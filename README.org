@@ -1,0 +1,5 @@
+:PROPERTIES:
+:ID:       afcb6cdf-f910-41e9-b609-10943d7a7e77
+:END:
+#+filetags: :project:
+#+title: Stochastic optimization - Introductionary problems
