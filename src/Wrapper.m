@@ -5,12 +5,10 @@
 % program can handle all cases.
 %
 
-## polynomialCoefficients = [10 -2 -1 1];
-## startingPoint = 2;
-## tolerance = 0.0001;
-## iterationValues = RunNewtonRaphson(polynomialCoefficients, startingPoint, tolerance);
-## PlotIterations(polynomialCoefficients,iterationValues);
-
-% OWN
-polynomialCoefficients = [1 2 3];
-value = DifferentiatePolynomial(polynomialCoefficients, 4)
+polynomialCoefficients = [10 -2 -1 1];
+startingPoint = 2;
+tolerance = 0.0001;
+iterationValues = RunNewtonRaphson(polynomialCoefficients, startingPoint, tolerance);
+if isnan(iterationValues) != 1
+    PlotIterations(polynomialCoefficients, iterationValues);
+end

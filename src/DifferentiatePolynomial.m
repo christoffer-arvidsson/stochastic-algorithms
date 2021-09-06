@@ -9,7 +9,6 @@ function derivativeCoefficients = DifferentiatePolynomial(polynomialCoefficients
   end
 
   derivativeCoefficients = newCoefficients;
-
 end
 
 function derivativeCoefficients = SingleDifferentiatePolynomial(polynomialCoefficients)
