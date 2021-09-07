@@ -4,5 +4,5 @@ function fitness = EvaluateIndividual(x)
   fNumerator += 2*cos(2*x(1) + 3*x(2))^2;
   fDenominator = 1 + x(1)^2 + x(2)^2;
 
-  fitness = fNumerator / fDenominator
+  fitness = fNumerator / fDenominator;
 end
