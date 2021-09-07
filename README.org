@@ -5,4 +5,7 @@
 #+title: Stochastic optimization algorithms
 
 Non-stochastic:
-- Newton-Rhapson's method
+- Newton-Rhapson's method :: Tutorial to matlab
+
+Stochastic:
+- Matlab into :: An introduction to stochastic algorithms, a basic genetic algorithm with tournament selection.
