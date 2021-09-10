@@ -16,7 +16,7 @@
 
 muValues = [1 10 100 1000];
 eta = 0.0001;
-xStart =  [Specify as a vector with two components, see Step 3 of the problem formulation];
+xStart =  [0.5 0.5];
 gradientTolerance = 1E-6;
 
 for i = 1:length(muValues)
