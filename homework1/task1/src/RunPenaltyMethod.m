@@ -13,7 +13,6 @@
 % other values of eta and other (increasing) sequences of the
 % µ parameter (muValues).
 
-
 muValues = [1 10 100 1000];
 eta = 0.0001;
 xStart =  [0.5 0.5];

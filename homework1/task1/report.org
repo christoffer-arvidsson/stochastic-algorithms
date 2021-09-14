@@ -1,4 +1,5 @@
-#+TITLE: Penalty method
+#+TITLE: Homework 1
+#+setupfile: ~/Dropbox/org/orbit/articles/setup_file.org
 
 * Problem 1.1
 \begin{align}
@@ -42,3 +43,60 @@ by setting the gradient to 0
 \begin{align}
 \nabla f_{p}(\mathbf{x};\mu = 0) = 0 \Rightarrow f_{p}^{\ast} = (x_1^{\ast}, x_2^{\ast}) = \left(\frac{1}{2}, \frac{1}{2}\right).
 \end{align}
+
+* Problem 1.2
+\begin{equation}
+f(x_1,x_2) = 4x_1^2 - x_1x_2 + 4x_2^2 - 6x_2
+\end{equation}
+
+Compute the gradient
+\begin{equation}
+\nabla f(x_1,x_2) =
+\begin{bmatrix}
+8x_1^2-x_2 \\
+-x_1+8x_2-6
+\end{bmatrix}
+\end{equation}
+
+Then, consider candidates in the interior of the surface by finding stationary points
+\begin{align*}
+\nabla f(x_{1}, x_{2}) =
+\begin{cases}
+8x_1^2-x_2 = 0 \\
+-x_1+8x_2-6 = 0
+\end{cases}
+\Rightarrow
+& 64x_2 - x_2 = 48 \\
+& x_2 = \frac{48}{63}, x_1 = \frac{2}{21}
+\end{align*}
+which is inside the surface.
+
+Now evaluate the gradient at the corners to check if they are stationary points
+\begin{align*}
+\nabla f(0,0) &= (0, -6)^{T} &\mbox{No candidate}\\
+\nabla f(0,1) &= (1, 2)^{T} &\mbox{No candidate}\\
+\nabla f(1,1) &= (7,1)^{T} &\mbox{No candidate}\\
+\end{align*}
+
+Next consider the edges of the surface
+- Line $(0,0)$ to $(1,1)$ :: Constraint $0 < x_1 < 1, x_2 = x_1$
+\begin{align*}
+f(x_{1}, x_{1}) &= 7x_1^2 - 6x_1\\
+\frac{df}{dx_{1}} &= 14x_1 - 6 \\
+\frac{df}{dx_{1}} &= 0 \Rightarrow x_{1} = \frac{3}{7} &
+\mbox{Candidate $(\frac{3}{7}, \frac{3}{7})^{T}$}
+\end{align*}
+- Line $(0,0)$ to $(0,1)$ :: Constraint $x_1 = 0, 0 < x_2 < 1$
+\begin{align*}
+f(0, x_{2}) &= 4x_2^2 - 6x_2 \\
+\frac{df}{dx_{2}} &= 8x_2 - 6 \\
+\frac{df}{dx_{2}} &= 0 \Rightarrow x_{2} = \frac{6}{8} &
+\mbox{Candidate $(0, \frac{6}{8})^{T}$}
+\end{align*}
+- Line $(0,1)$ to $(1,1)$ :: Constraint $0 < x_1 < 1, x_2 = 1$
+\begin{align*}
+f(x_1, 1) &= 4x_1^2 - x_1 - 2\\
+\frac{df}{dx_{1}} &= 8x_{1} -1\\
+\frac{df}{dx_{1}} &= 0 \Rightarrow x_{1} = \frac{1}{8} &
+\mbox{Candidate $(\frac{1}{8}, 1)^{T}$}
+\end{align*}
