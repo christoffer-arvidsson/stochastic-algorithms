@@ -1,6 +1,7 @@
 function selectedIndividualIndex = TournamentSelect(fitnessList, tournamentProbability, tournamentSize);
   populationSize = size(fitnessList, 2);
-  tournamentIndividuals = randsample(populationSize, tournamentSize);
+  tournamentIndividuals = 1 + fix(rand(tournamentSize, 1) * populationSize);
+
   eligableMask = ones(size(tournamentIndividuals)) == 1;
   indices = 1:populationSize;
 
