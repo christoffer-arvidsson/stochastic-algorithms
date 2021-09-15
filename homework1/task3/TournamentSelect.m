@@ -12,15 +12,16 @@ function selectedIndividualIndex = TournamentSelect(fitnessList, tournamentProba
 
     roll = rand;
     if roll < tournamentProbability || iRound == tournamentSize
-      # Done if we roll below, or if only one individual remains
+      % Done if we roll below, or if only one individual remains
       selectedIndividualIndex = eligableIndividuals(iBestFitness);
       break
     else
-      # Remove from tournament. Since iBestFitness is masked, we need to
-      # translate it into an unmasked index which the mask array needs to be updated.
-      realIndices = indices(eligableMask);
-      i = realIndices(iBestFitness);
-      eligableMask(i) = false;
+      % Remove from tournament. Since iBestFitness is masked, we need to
+      % translate it into an unmasked index, which the mask array needs in order
+      % to be updated.
+      maskedIndices = indices(eligableMask);
+      iUnmaskedBestFitness = maskedIndices(iBestFitness);
+      eligableMask(iUnmaskedBestFitness) = false;
     end
   end
 end

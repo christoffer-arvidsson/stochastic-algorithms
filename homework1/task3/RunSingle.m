@@ -17,5 +17,3 @@ numberOfGenerations = 2000;        % Changes allowed.
                                        tournamentProbability, crossoverProbability, mutationProbability, numberOfGenerations);
 
 sprintf('Fitness: %d, x(1): %0.10f, x(2): %0.10f', maximumFitness, bestVariableValues(1), bestVariableValues(2))
-
-

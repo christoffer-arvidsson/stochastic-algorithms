@@ -9,5 +9,3 @@ function newIndividuals = Cross(individual1, individual2)
   newIndividuals(2, mask) = individual2(mask);
   newIndividuals(2, ~mask) = individual1(~mask);
 end
-
-newIndividuals = Cross([1 1 1 1], [0 0 0 0])

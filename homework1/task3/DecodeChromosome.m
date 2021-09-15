@@ -14,5 +14,3 @@ function x = DecodeChromosome(chromosome,numberOfVariables,maximumVariableValue)
   end
 end
 
-assert(DecodeChromosome([1 1 1 1 1 1 1 1], 2, 3), [3 3])
-assert(DecodeChromosome([0 0 0 0 0 0 0 0], 2, 3), [-3 -3])

@@ -6,5 +6,3 @@ function result = RunUnitTests();
 
     result = true;
 end
-
-result = RunUnitTests()
