@@ -15,5 +15,6 @@ function derivativeCoefficients = SingleDifferentiatePolynomial(polynomialCoeffi
   n = length(polynomialCoefficients);
 
   powers = 0:n-1;
-  derivativeCoefficients = (polynomialCoefficients .* powers)(2:n);
+  powers = polynomialCoefficients .* powers;
+  derivativeCoefficients = powers(2:n);
 end

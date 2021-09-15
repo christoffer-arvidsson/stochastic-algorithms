@@ -2,10 +2,10 @@
 % where a0, a1, ... are obtained from polynomialCoefficients.
 
 function value = GetPolynomialValue(x, polynomialCoefficients)
-  output = 0;
+  res = 0.0;
   for iCoeff = 1:length(polynomialCoefficients)
-    output += polynomialCoefficients(iCoeff) * x^(iCoeff-1);
+    res = res + polynomialCoefficients(iCoeff) * x^(iCoeff-1);
   end
 
-  value = output;
+  value = res;
 end

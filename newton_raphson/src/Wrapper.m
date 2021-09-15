@@ -9,6 +9,6 @@ polynomialCoefficients = [10 -2 -1 1];
 startingPoint = 2;
 tolerance = 0.0001;
 iterationValues = RunNewtonRaphson(polynomialCoefficients, startingPoint, tolerance);
-if isnan(iterationValues) != 1
+if ~isnan(iterationValues)
     PlotIterations(polynomialCoefficients, iterationValues);
 end
