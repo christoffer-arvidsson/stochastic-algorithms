@@ -45,6 +45,7 @@ by setting the gradient to 0
 \end{align}
 
 * Problem 1.2
+** Task a
 \begin{equation}
 f(x_1,x_2) = 4x_1^2 - x_1x_2 + 4x_2^2 - 6x_2
 \end{equation}
@@ -99,4 +100,75 @@ f(x_1, 1) &= 4x_1^2 - x_1 - 2\\
 \frac{df}{dx_{1}} &= 8x_{1} -1\\
 \frac{df}{dx_{1}} &= 0 \Rightarrow x_{1} = \frac{1}{8} &
 \mbox{Candidate $(\frac{1}{8}, 1)^{T}$}
+\end{align*}
+
+** Task b
+The optimization problem is
+\begin{align}
+\min_{x_1,x_2} \quad & f(x_1, x_2) = 15 + 2x_{1} + 3x_{2} \\
+\text{subject to} \quad & h(x_1, x_2) = x_1^2 + x_1x_2 + x_2^2-21 = 0,
+\end{align}
+and should be solved using the Lagrange multiplier method.
+
+First define
+\begin{equation}
+L(x_1,x_2,\lambda) = f(x_1,x_2) + \lambda h(x_1,x_2).
+\end{equation}
+
+Next find the critical points of $L$ by calculating the gradient and setting it to 0
+\begin{align*}
+\nabla_{x_1,x_2,\lambda}L(x_1,x_2,\lambda) = 0 \Rightarrow
+\begin{cases}
+i) & \frac{\partial L}{\partial x_{1}} = 2 + \lambda(2x_{1} + x_{2}) = 0 \\[1mm]
+ii) & \frac{\partial L}{\partial x_{2}} = 3 + \lambda(x_{1} + 2x_{2}) = 0 \\[1mm]
+iii) & \frac{\partial L}{\partial \lambda} = x_1^2 + x_1x_2 + x_2^2-21 = 0,
+\end{cases}
+\end{align*}
+which results in a three equations, three variable system, which we can solve.
+
+Do $i - 2ii$ and solve for $x_2$
+\begin{align*}
+2 + \lambda(2x_{1} + x_{2}) - 2(3 + \lambda(x_{1} + 2x_{2})) &= 0 \\
+-3\lambda x_{2} &= 4 \\
+x_{2} &= -\frac{4}{3\lambda}.
+\end{align*}
+
+Then, insert into Equation $ii$ and solve for $x_1$
+\begin{align*}
+\lambda x_{1} &= -3 - 2\lambda \left(-\frac{4}{3\lambda}\right)\\
+x_1 &= -\frac{1}{3\lambda}.
+\end{align*}
+
+So
+\begin{equation*}
+\begin{cases}
+x_{1} = -\frac{1}{3\lambda}\\
+x_{2} = -\frac{4}{3\lambda}.
+\end{cases}
+\end{equation*}
+
+Insert into Equation $iii$ and solve for $\lambda$
+\begin{align*}
+x_1^2 + x_1x_2 + x_2^2-21 &= 0\\
+\left(-\frac{1}{3\lambda}\right)^2 + \left(-\frac{1}{3\lambda}\right)\left(-\frac{4}{3\lambda}\right) + \left(-\frac{4}{3\lambda}\right)^2-21 &= 0\\
+\frac{1}{9\lambda^2} +\frac{4}{9\lambda^2} +\frac{16}{9\lambda^2} &= 21\\
+\frac{21}{9\lambda^2} &= 21 \\
+\lambda^{2} &= 1/9 \\
+\lambda &= \pm 1/3.
+\end{align*}
+
+Finally, calculate $x_{1}^{\ast}, x_{2}^{\ast}$ and evaluate $f(x_{1}^{\ast}, x_2^{\ast})$ for each $\lambda$ to determine type of optimum
+\begin{align*}
+\lambda_{1} = \frac{1}{3} \Rightarrow &
+\begin{cases}
+x_{1} = -1\\
+x_{2} = -4
+\end{cases} &\Rightarrow
+f(-1, -4) = 1 \quad &\text{global minimum}\\
+\lambda_{2} = -\frac{1}{3} \Rightarrow &
+\begin{cases}
+x_{1} = 1\\
+x_{2} = 4
+\end{cases} &\Rightarrow
+f(1, 4) = 29 \quad &\text{global maximum}\\
 \end{align*}
