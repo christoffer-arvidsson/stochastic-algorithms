@@ -58,7 +58,7 @@ shows how each component converges as $\mu$ increases.
 #+name: tbl:results
 #+attr_latex: :booktabs t
 #+caption: The components of $\mathbf{x}^{\ast}$ for increasing values of $\mu$.
-| $\mu$ |  $x_{1}$ |  $x_{2}$ |
+| $\mu$ |  $x_{1}$       |        $x_{2}$ |
 |-------+----------+----------|
 |     / |        < |          |
 |     1 | 0.433777 | 1.210166 |
@@ -212,3 +212,55 @@ f(1, 4) = 29 \quad &\text{Global maximum}\\
 \end{align*}
 
 _Answer_: Global minimum: $(x_{1}^{\ast}, x_{2}^{\ast})^{T} = (-1, -4)$
+
+* Problem 1.3
+Run the algorithm for 10 runs using parameters shown in Table [[tbl:3-1-params]].
+The results are shown in Table [[tbl:3-1-results]]. From these results, we can guess that the minimum is $(x_1^{\ast}, x_2^{\ast})^{T} = (3, 0.5)$, where
+$g(3,0.5) = 0$. This would explain why the fitness grows to extreme values.
+
+#+name: tbl:3-1-params
+#+attr_latex: :booktabs t
+#+caption: Parameters used for the 10 runs.
+| Parameter                                  | Value |
+|--------------------------------------------+-------|
+| /                                          |     < |
+| Number of runs                             |    10 |
+| Population size ($N$)                      |   100 |
+| Clamp value $d$                            |     5 |
+| Number of genes                            |    50 |
+| Tournament size                            |    20 |
+| Tour. select probability $p_{\text{tour}}$ |  0.75 |
+| Mutation probability $p_{\text{mut}}$      |  0.02 |
+| Crossover probability $p_{\text{cross}}$   |   0.8 |
+| Number of generations                      |  2000 |
+
+#+name: tbl:3-1-results
+#+attr_latex: :booktabs t
+#+caption: Results from the 10 runs of the genetic algorighm. In these runs.
+| Run |      $x_{1}$ |      $x_{2}$ |      Fitness | $g(x_{1}, x_{2})$ |
+|-----+--------------+--------------+--------------+-------------------|
+|   / |            < |              |              |                   |
+|   1 | 2.8906249371 | 0.4687498650 | 4.290043e+02 |      0.0023309790 |
+|   2 | 2.9687499395 | 0.4921533314 | 6.178123e+03 |      0.0001618615 |
+|   3 | 3.7500002608 | 0.6384276044 | 2.281390e+01 |      0.0438329208 |
+|   4 | 3.1250002421 | 0.5273436167 | 4.342576e+02 |      0.0023027805 |
+|   5 | 2.9589846122 | 0.4882811155 | 3.095889e+03 |      0.0003230090 |
+|   6 | 2.1250154711 | -0.000000149 | 1.523809e+00 |      0.6562503965 |
+|   7 | 2.9929515121 | 0.4980467408 | 1.119665e+05 |      0.0000089312 |
+|   8 | 2.9980468153 | 0.4995156973 | 1.634116e+06 |      0.0000006120 |
+|   9 | 3.0006643534 | 0.5001832694 | 1.272922e+07 |      0.0000000786 |
+|  10 | 2.4999999255 | 0.3500364825 | 1.375514e+01 |      0.0727000875 |
+
+#+begin_comment
+Raw results
+    'Fitness: 4.290043e+02, x(1): 2.8906249371, x(2): 0.4687498650, g: 0.0023309790'
+    'Fitness: 6.178123e+03, x(1): 2.9687499395, x(2): 0.4921533314, g: 0.0001618615'
+    'Fitness: 2.281390e+01, x(1): 3.7500002608, x(2): 0.6384276044, g: 0.0438329208'
+    'Fitness: 4.342576e+02, x(1): 3.1250002421, x(2): 0.5273436167, g: 0.0023027805'
+    'Fitness: 3.095889e+03, x(1): 2.9589846122, x(2): 0.4882811155, g: 0.0003230090'
+    'Fitness: 1.523809e+00, x(1): 2.1250154711, x(2): -0.0000001490, g: 0.6562503965'
+    'Fitness: 1.119665e+05, x(1): 2.9929515121, x(2): 0.4980467408, g: 0.0000089312'
+    'Fitness: 1.634116e+06, x(1): 2.9980468153, x(2): 0.4995156973, g: 0.0000006120'
+    'Fitness: 1.272922e+07, x(1): 3.0006643534, x(2): 0.5001832694, g: 0.0000000786'
+    'Fitness: 1.375514e+01, x(1): 2.4999999255, x(2): 0.3500364825, g: 0.0727000875'
+#+end_comment
