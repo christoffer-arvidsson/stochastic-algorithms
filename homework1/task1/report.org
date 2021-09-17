@@ -214,6 +214,7 @@ f(1, 4) = 29 \quad &\text{Global maximum}\\
 _Answer_: Global minimum: $(x_{1}^{\ast}, x_{2}^{\ast})^{T} = (-1, -4)$
 
 * Problem 1.3
+** Task a
 Run the algorithm for 10 runs using parameters shown in Table [[tbl:3-1-params]].
 The results are shown in Table [[tbl:3-1-results]]. From these results, we can guess that the minimum is $(x_1^{\ast}, x_2^{\ast})^{T} = (3, 0.5)$, where
 $g(3,0.5) = 0$. This would explain why the fitness grows to extreme values.
@@ -264,3 +265,27 @@ Raw results
     'Fitness: 1.272922e+07, x(1): 3.0006643534, x(2): 0.5001832694, g: 0.0000000786'
     'Fitness: 1.375514e+01, x(1): 2.4999999255, x(2): 0.3500364825, g: 0.0727000875'
 #+end_comment
+
+** Task b
+** Task c
+Task a showed that the minimum seemed to converge to $(x_1^{\ast},
+x_2^{\ast})^{T} = (3, 0.5)$. To check if this is a stationary point, first
+compute the gradient using the chain rule where applicable
+\begin{equation}
+\nabla g(x_1,x_2) =
+\begin{bmatrix}
+2(1.5 - x_1 + x_1x_2)(x_2-1) + 2(2.25 - x_1 + x_1x_2^2)(x_2^2-1) + \\ + 2(2.625 - x_1 + x_1x_2^3)^3(x_2^3-1) \\
+2(1.5-x_1+x_1x_2)x_1 + 2(2.25 - x_1 + x_1x_2^2)(2x_1x_2) + \\ + 2(2.625 - x_1 + x_1x_2^3)(3x_1x_2^2)
+\end{bmatrix}.
+\end{equation}
+
+Then, evaluate the gradient at the found solution
+\begin{equation*}
+\nabla g(3,0.5) =
+\begin{bmatrix}
+0+ 0+0\\
+0+ 0+0\\
+\end{bmatrix}=
+(0,0)^T,
+\end{equation*}
+and note that is a stationary point since it evaluates to the 0 vector.
