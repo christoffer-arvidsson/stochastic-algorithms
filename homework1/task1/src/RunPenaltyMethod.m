@@ -13,9 +13,9 @@
 % other values of eta and other (increasing) sequences of the
 % µ parameter (muValues).
 
-muValues = [1 10 100 1000];
-eta = 0.0001;
-xStart =  [0.5 0.5];
+muValues = [1 10 100 1000 10000];
+eta = 0.00001;
+xStart =  [1 2];
 gradientTolerance = 1E-6;
 
 for i = 1:length(muValues)

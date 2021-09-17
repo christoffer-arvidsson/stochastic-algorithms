@@ -7,7 +7,8 @@ function x = RunGradientDescent(xStart, mu, eta, gradientTolerance)
   % Do while loop
   while true
     gradF = ComputeGradient(x, mu);
-    x = x - eta .* gradF;
+    x = x - eta * gradF;
+
     if norm(gradF) < gradientTolerance
       break
     end
