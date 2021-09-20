@@ -17,20 +17,22 @@ crossoverProbability = 0.8;        % Do NOT change
 % Batch runs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% Speed up by defining number of available threads, which by default is 6 for me.
 cluster = parcluster('local');
 cluster.NumWorkers = 12;
 saveProfile(cluster);
 
-numParameters = 10;
-mutationProbabilityRange = linspace(0.02, 1.0, numParameters);
+numParameters = 12;
+mutationProbabilityRange = 0:numParameters-1;
+mutationProbabilityRange = 0.01 .* mutationProbabilityRange;
 maximumFitnessList = zeros(numParameters, numberOfRuns);
-for iSearch = 1:numParameters
+parfor iSearch = 1:numParameters
   mutationProbability = mutationProbabilityRange(iSearch);
   sprintf('Mutation rate = %0.5f', mutationProbability);
-  parfor i = 1:numberOfRuns
+  for i = 1:numberOfRuns
     [maximumFitness, bestVariableValues]  = RunFunctionOptimization(populationSize, numberOfGenes, numberOfVariables, maximumVariableValue, tournamentSize, ...
                                                                     tournamentProbability, crossoverProbability, mutationProbability, numberOfGenerations);
-    sprintf('Run: %d, Score: %0.10f', i, maximumFitness)
+    sprintf('PMut: %0.10f, Run: %d, Score: %0.10f', mutationProbability, i, maximumFitness)
     maximumFitnessList(iSearch, i) = maximumFitness;
   end
 end
@@ -39,9 +41,22 @@ end
 %% Summary of results
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-average = mean(maximumFitnessList);
-med = median(maximumFitnessList);
-std = sqrt(var(maximumFitnessList));
+average = mean(maximumFitnessList, 2);
+med = median(maximumFitnessList, 2);
+std = sqrt(var(maximumFitnessList, 0, 2));
 for iSearch = 1:numParameters
-  sprintf('PMut = %0.10f: Median: %0.10f, Average: %0.10f, STD: %0.10f', mutationProbabilityRange(iSearch), med(iSearch), average(iSearch), std(iSearch))
+  sprintf('PMut: %0.10f, Median: %0.10f, Average: %0.10f, STD: %0.10f', mutationProbabilityRange(iSearch), med(iSearch), average(iSearch), std(iSearch))
 end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Plot results
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+plot(mutationProbabilityRange, med, '-o');
+xlabel('p_{mut}');
+ylabel('median fitness');
+set(gcf, 'PaperUnits', 'inches');
+x_width=7.25 ;y_width=4.125;
+set(gca, 'YScale', 'log');
+set(gcf, 'PaperPosition', [0 0 x_width y_width]);
+title('Median fitness based on mutation probability');
+saveas(gcf,'../img/1_3.png');

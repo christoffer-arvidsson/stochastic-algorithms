@@ -1,6 +1,6 @@
 function newIndividuals = Cross(individual1, individual2)
   nGenes = size(individual1, 2);
-  crossoverPoint = 1 + fix(rand*(nGenes));
+  crossoverPoint = 1 + fix(rand*(nGenes - 1));
   mask = 1:nGenes < crossoverPoint;
 
   newIndividuals = zeros(2,nGenes);
