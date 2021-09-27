@@ -18,15 +18,15 @@ crossoverProbability = 0.8;        % Do NOT change
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Speed up by defining number of available threads, which by default is 6 for me.
-cluster = parcluster('local');
-cluster.NumWorkers = 12;
-saveProfile(cluster);
+## cluster = parcluster('local');
+## cluster.NumWorkers = 12;
+## saveProfile(cluster);
 
 numParameters = 12;
 mutationProbabilityRange = 0:numParameters-1;
 mutationProbabilityRange = 0.01 .* mutationProbabilityRange;
 maximumFitnessList = zeros(numParameters, numberOfRuns);
-parfor iSearch = 1:numParameters
+for iSearch = 1:numParameters
   mutationProbability = mutationProbabilityRange(iSearch);
   sprintf('Mutation rate = %0.5f', mutationProbability);
   for i = 1:numberOfRuns
@@ -59,4 +59,4 @@ x_width=7.25 ;y_width=4.125;
 set(gca, 'YScale', 'log');
 set(gcf, 'PaperPosition', [0 0 x_width y_width]);
 title('Median fitness based on mutation probability');
-saveas(gcf,'../img/1_3.png');
+shg
