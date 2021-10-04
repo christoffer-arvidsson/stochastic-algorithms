@@ -23,7 +23,6 @@ rho = 0.3;          %% Changes allowed
 tau0 = 0.1;         %% Changes allowed
 
 targetPathLength = 103;
-targetPathLength = 10;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialization
@@ -57,7 +56,7 @@ while (minimumPathLength > targetPathLength)
     pathLength = GetPathLength(path, cityLocation);                 % To do: Write the GetPathLength function
     if (pathLength < minimumPathLength)
       minimumPathLength = pathLength;
-      disp(sprintf('Iteration %d, ant %d: path length = %.5f',iIteration,k,minimumPathLength));
+      fprintf('Iteration %d, ant %d: path length = %.5f\n',iIteration,k,minimumPathLength);
       PlotPath(connection,cityLocation,path);
     end
     pathCollection(k,:) = path;
@@ -72,6 +71,7 @@ while (minimumPathLength > targetPathLength)
   pheromoneLevel = UpdatePheromoneLevels(pheromoneLevel,deltaPheromoneLevel,rho);          % To do: write the UpdatePheromoneLevels function
 
 end
+
 
 
 
