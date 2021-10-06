@@ -1,26 +1,24 @@
-function acceleration = CalculateAcceleration(brakePressure, gearLevel, gearConstant, mass, ...
-                                              alpha, brakePressure, brakeTemperature, maxTemperature)
-    gravityForce = CalculateGravityForce(mass, gravityForce, alpha);
-    foundationBrakeForce = CalculateFoundationBrakeForce(mass, gravityConstant, brakeTemperature ...
+function acceleration = CalculateAcceleration(brakePressure, gearLevel, gearConstant, mass, alpha, gravityConstant, brakeTemperature, maxTemperature)
+    gravityForce = CalculateGravityForce(mass, gravityConstant, alpha);
+    foundationBrakeForce = CalculateFoundationBrakeForce(mass, gravityConstant, brakeTemperature, ...
                                                          maxTemperature, brakePressure);
 
     engineBreakForce = CalculateEngineBreakForce(gearLevel, gearConstant);
 
-    acceleration = gravityForce - foundationBrakeForce - engineBreakForce;
+    acceleration = (gravityForce - foundationBrakeForce - engineBreakForce) / mass;
 end
 
 function gravityForce = CalculateGravityForce(mass, gravityConstant, alpha)
-    gravityForce = mass * gravityConstant * sin(alpha);
+    gravityForce = mass * -gravityConstant * sin(alpha);
 end
 
-function foundationBrakeForce = CalculateFoundationBrakeForce(mass, gravityConstant, brakeTemperature ...
-                                                 maxTemperature, brakePressure)
+function foundationBrakeForce = CalculateFoundationBrakeForce(mass, gravityConstant, brakeTemperature, ...
+                                                              maxTemperature,  brakePressure)
     foundationBrakeForce = ((mass * gravityConstant)/20) * brakePressure;
     if brakeTemperature >= maxTemperature - 100
         exponent = -1 * (brakeTemperature - (maxTemperature - 100)) / 100;
-        foundationBrakeForce = foundationBrakeForce * exp(exponent)
+        foundationBrakeForce = foundationBrakeForce * exp(exponent);
     end
-
 end
 
 function engineBreakForce = CalculateEngineBreakForce(gearLevel, gearConstant)

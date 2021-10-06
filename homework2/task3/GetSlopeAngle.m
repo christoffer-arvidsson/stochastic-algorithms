@@ -26,8 +26,24 @@ if (iDataSet == 1)                                % Training
  if (iSlope == 1) 
    alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
 
- %%
+   %%
  %% Insert the remaining 8 training set slopes here
+ elseif (iSlope == 2) 
+   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
+ elseif (iSlope == 3) 
+   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
+ elseif (iSlope == 4) 
+   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
+ elseif (iSlope == 5) 
+   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
+ elseif (iSlope == 6) 
+   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
+ elseif (iSlope == 7) 
+   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
+ elseif (iSlope == 8) 
+   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
+ elseif (iSlope == 9) 
+   alpha = 4 + sin(x/100) + cos(sqrt(2)*x/50);    % You may modify this!
  %% 
 
  elseif (iSlope== 10)

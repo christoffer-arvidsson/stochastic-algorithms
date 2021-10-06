@@ -1,6 +1,7 @@
 function [wIH, wHO] = DecodeChromosome(chromosome, nIn, nHidden, nOut, wMax)
-    chromosomeLength = length(chromosome);
+  chromosomeLength = length(chromosome);
+  chromosome = chromosome ./ (wMax * 2) + wMax;
 
-    wIH = reshape(chromosome(1:(nIn+1)*nHidden), nHidden+1, nIn)'
-    wHO = reshape(chromosome((nIn+1)*nHidden+1:end), nHidden+1, nOut)'
+  wIH = reshape(chromosome(1:(nIn+1)*nHidden), nIn+1, nHidden)';
+  wHO = reshape(chromosome((nIn+1)*nHidden+1:end), nHidden+1, nOut)';
 end
