@@ -9,7 +9,7 @@ clc;
 % Parameters %
 %%%%%%%%%%%%%%
 
-numIterations = 500;
+numIterations = 100;
 numVariables = 2;
 numParticles = 50;
 xMin = -5;

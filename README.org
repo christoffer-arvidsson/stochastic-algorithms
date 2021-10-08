@@ -4,8 +4,20 @@
 #+filetags: :project:
 #+title: Stochastic optimization algorithms
 
+Homework solutions to the Stochastic optimization algotithms course at
+Chalmers.
+
 Non-stochastic:
 - Newton-Rhapson's method :: Tutorial to matlab
+- Penalty method :: Another method for finding optima
 
 Stochastic:
 - Matlab into :: An introduction to stochastic algorithms, a basic genetic algorithm with tournament selection.
+- Ant colony :: Algorithm for finding optimal paths in a network, in this case the travelling salesman problem.
+- Particle swarm :: Find optima by using swarms of particles with flocking behavious.
+- Genetic algorithm/neural network :: Train a neural network with a
+  genetic algorithm instead of backpropagation. In this case, for
+  finding efficient braking strategy for a truck going downhill.
+- Linear genetic programming :: Evolve computer programs to curve fit a function. 
+  
+  
