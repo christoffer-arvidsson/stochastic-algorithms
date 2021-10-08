@@ -9,5 +9,5 @@ function chromosome = EncodeNetwork(wIH, wHO, wMax)
     chromosome(1:numel(wIH))= reshape(wIH', [], 1);
     chromosome(numel(wIH)+1:end)= reshape(wHO', [], 1);
 
-    chromosome = -wMax + 2 .* wMax .* chromosome;
+    chromosome = (chromosome + wMax) ./ (2*wMax);
 end
