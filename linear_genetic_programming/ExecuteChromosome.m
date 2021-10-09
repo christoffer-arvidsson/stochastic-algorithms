@@ -1,6 +1,6 @@
-function estimate = ExecuteChromosome(chromosome, chromosomeLength, ...
-                                      registers, operatorSet)
+function estimate = ExecuteChromosome(chromosome, registers, operatorSet)
 
+  chromosomeLength = size(chromosome,1);
   for iInstruction = 1:4:chromosomeLength-3
     operator = operatorSet{chromosome(iInstruction)};
     operand1 = chromosome(iInstruction+1);

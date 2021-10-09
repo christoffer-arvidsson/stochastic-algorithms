@@ -1,6 +1,6 @@
 function mutatedChromosome = Mutate(chromosome, mutationProbability, ...
-                                    numVariableRegisters, ...
-                                    numConstantRegisters, numOperations);
+                                                 numVariableRegisters, ...
+                                                 numConstantRegisters, numOperations);
   numGenes = size(chromosome, 2);
   numInstructions = fix(numGenes / 4);
   numRegisters = numVariableRegisters + numConstantRegisters;
@@ -16,6 +16,5 @@ function mutatedChromosome = Mutate(chromosome, mutationProbability, ...
       mutatedChromosome(iGene) = randi(numRegisters);
     end
   end
-  mutatedChromosome
 end
 
