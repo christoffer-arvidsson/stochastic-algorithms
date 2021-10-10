@@ -1,3 +1,3 @@
-function error = RootMeanSquaredError(trueValues, estimatedValues)
-  error = sqrt(mean((estimatedValues - estimatedValues).^2));
+function error = RootMeanSquaredError(yTrue, yEstimate)
+  error = sqrt(mean((yEstimate - yTrue).^2));
 end

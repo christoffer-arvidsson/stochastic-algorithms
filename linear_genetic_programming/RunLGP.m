@@ -1,89 +1,96 @@
-numberOfGenerations = 10000;
-populationSize = 100;
-chromosomeBufferSize = 1000; % Max chromosome length!
-initialChromosomeLength = 16;
-numVariableRegisters = 10;
-numConstantRegisters = 3;
+
+numberOfGenerations = 50000;
+populationSize = 1000;
+initialChromosomeLength = 256;
+mutationProbability = 0.05;
+tournamentProbability = 0.75;
+tournamentSize = 5;
+crossoverProbability = 0.8;
+chromosomeLengthBeforePenalty = 4 * 64;
+chromosomeLengthPenaltyFactor = 0.95;
+
+numVariableRegisters = 4;
+numConstantRegisters = 1;
 numOperations = 4;
+constants = [-0.8];
 operatorSet = cell(numOperations,1);
 operatorSet{1} = @plus;
 operatorSet{2} = @minus;
 operatorSet{3} = @mtimes; 
 operatorSet{4} = @ProtectedDivision;
 
-mutationProbability = 0.1;
-tournamentProbability = 0.75;
-tournamentSize = 5;
-crossoverProbability = 0.8;
+population = InitializePopulation(populationSize,...
+                                  initialChromosomeLength,...
+                                  operatorSet,...
+                                  numVariableRegisters,...
+                                  numConstantRegisters);
 
-[population, chromosomeLengths] = InitializePopulation(populationSize,...
-                                                       initialChromosomeLength,...
-                                                       operatorSet,...
-                                                       numVariableRegisters,...
-                                                       numConstantRegisters,...
-                                                       chromosomeBufferSize);
-
-numRegisters = numVariableRegisters + numConstantRegisters;
-registers = zeros(populationSize, numRegisters);
 functionData = LoadFunctionData;
+xValues = functionData(:,1);
+yTrue = functionData(:,2);
 numSamples = size(functionData, 2);
+constantRegisters = constants;
 
 for generation = 1:numberOfGenerations
   % Evaluation
   fitnessList = zeros(populationSize, 1);
-  for iIndividual = 1:populationSize
-    trueValues = functionData(:,2);
-    estimates = zeros(numSamples, 1);
-    for iData = 1:numSamples
-      x = functionData(iData,1);
-      registers(iIndividual, 1:numVariableRegisters) = 0;
-      registers(iIndividual, 1) = x; 
-      estimates(iData) = ExecuteChromosome(population(iIndividual,1:chromosomeLengths(iIndividual)),...
-                                          registers(iIndividual,:), operatorSet);
-    end
-    error = RootMeanSquaredError(trueValues, estimates);
-    fitnessList(iIndividual) = 1/error;
+  parfor iChromosome = 1:populationSize
+    variableRegisters = zeros(numVariableRegisters, 1);
+    [fitnessList(iChromosome), ~] = EvaluateChromosome(population(iChromosome).genes, ...
+                                                       variableRegisters, ...
+                                                       constantRegisters, ...
+                                                       operatorSet, ...
+                                                       xValues, yTrue,...
+                                                       chromosomeLengthBeforePenalty, ...
+                                                       chromosomeLengthPenaltyFactor);
   end
+
+  [~, bestIndividualIndex] = max(fitnessList);
 
   % Crossover
   temporaryPopulation = population;
-  temporaryChromosomeLengths = chromosomeLengths;
-
-  for i = 1:2:populationSize
+  
+  for iChromosome = 1:2:populationSize
     i1 = TournamentSelect(fitnessList, tournamentProbability, tournamentSize);
     i2 = TournamentSelect(fitnessList, tournamentProbability, tournamentSize);
+    individual1 = population(i1).genes;
+    individual2 = population(i2).genes;
     r = rand;
     if (r < crossoverProbability) 
-      individual1 = population(i1,1:chromosomeLengths(i1));
-      individual2 = population(i2,1:chromosomeLengths(i2));
       [newIndividual1, newIndividual2] = Cross(individual1, individual2);
-      temporaryPopulation(i,1:length(newIndividual1)) = newIndividual1;
-      temporaryPopulation(i+1,1:length(newIndividual2)) = newIndividual2;
-      temporaryChromosomeLengths(i) = length(newIndividual1);
-      temporaryChromosomeLengths(i+1) = length(newIndividual2);
+      temporaryPopulation(iChromosome).genes = newIndividual1;
+      temporaryPopulation(iChromosome+1).genes = newIndividual2;
     else
-      temporaryPopulation(i,:) = population(i1,:);
-      temporaryPopulation(i+1,:) = population(i2,:);     
+      temporaryPopulation(iChromosome).genes = individual1;
+      temporaryPopulation(iChromosome+1).genes = individual2;     
     end
   end
   
   % Mutate
   for iChromosome = 1:populationSize
-    temporaryPopulation(i,1:chromosomeLengths(i)) = Mutate(temporaryPopulation(i,1:chromosomeLengths(i)), ...
-                                                           mutationProbability, ...
-                                                           numVariableRegisters, ...
-                                                           numConstantRegisters, ...
-                                                           numOperations);
+    temporaryPopulation(iChromosome).genes = Mutate(temporaryPopulation(iChromosome).genes, ...
+                                                    mutationProbability, ...
+                                                    numVariableRegisters, ...
+                                                    numConstantRegisters, ...
+                                                    numOperations);
   end
+  
+  temporaryPopulation(1).genes = population(bestIndividualIndex).genes;
+  population = temporaryPopulation;
 
-  for iIndividual = 1:populationSize
-    population(iIndividual, 1:temporaryChromosomeLengths(iIndividual)) = ...
-        temporaryPopulation(iIndividual, 1:temporaryChromosomeLengths(iIndividual));
+  fprintf("Generation %d\tfitness: %.2f\terror %.4f\tlength %d\n", generation, ...
+          max(fitnessList), 1/max(fitnessList), length(population(2).genes))
+
+  mutationProbability = 1/length(population(1).genes);
+
+  if mod(generation, 5) == 0
+    clf
+    PlotFit(population(1).genes);
+    drawnow
   end
-  chromosomeLengths = temporaryChromosomeLengths;
-  fprintf("Generation %d\n", generation)
 end
 
-PlotFit(population(1,1:chromosomeLengths(1)));
+
+
 
 

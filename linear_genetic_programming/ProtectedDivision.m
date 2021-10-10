@@ -1,7 +1,8 @@
 function r = ProtectedDivision(x, y)
-  cMax = 10000000;
+  cMax = 100000;
   if y == 0
-    r = x / y;
-  else
     r =  cMax;
+  else
+    r = x / y;
 end
+  

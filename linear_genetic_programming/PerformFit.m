@@ -1,22 +1,23 @@
-function yEstimate = PerformFit(xValues, chromosome)
-  numVariableRegisters = 10;
-  numConstantRegisters = 3;
-  numOperations = 4;
-  operatorSet = cell(numOperations,1);
+function yEstimate = PerformFit(xValues, yTrue, chromosome)
+  numVariableRegisters = 4;
+  numConstantRegisters = 1;
+  numOperators = 4;
+  operatorSet = cell(numOperators,1);
   operatorSet{1} = @plus;
   operatorSet{2} = @minus;
   operatorSet{3} = @mtimes; 
   operatorSet{4} = @ProtectedDivision;
-  numRegisters = numVariableRegisters + numConstantRegisters;
+  constants = [-0.8];
+  chromosomeLengthBeforePenalty = 256;
+  chromosomeLengthPenaltyFactor = 0.95;
 
-  numDatapoints = size(xValues, 1);
-
-  registers = zeros(numRegisters, 1);
-  yEstimate = zeros(numDatapoints, 1);
-  for xIndex = 1:numDatapoints
-    x = xValues(xIndex);
-    registers = 0
-    registers(1) = x;
-    yEstimate(xIndex) = ExecuteChromosome(chromosome, registers, operatorSet);
-  end
+  constantRegisters = constants;
+  variableRegisters = zeros(numVariableRegisters, 1);
+  [fitness, yEstimate] = EvaluateChromosome(chromosome, ...
+                                            variableRegisters, ...
+                                            constantRegisters, ...
+                                            operatorSet, ...
+                                            xValues, yTrue,...
+                                            chromosomeLengthBeforePenalty, ...
+                                            chromosomeLengthPenaltyFactor);
 end

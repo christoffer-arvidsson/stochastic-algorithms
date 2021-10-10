@@ -2,7 +2,7 @@ function PlotFit(chromosome)
   data = LoadFunctionData;
   xValues = data(:,1);
   yTrue = data(:,2);
-  yEstimate = PerformFit(xValues, chromosome)
+  yEstimate = PerformFit(xValues, yTrue, chromosome);
 
   plot(xValues, yTrue);
   hold on
@@ -10,3 +10,4 @@ function PlotFit(chromosome)
   title('Function fit');
   xlabel('$x$', 'Interpreter', 'latex');
   ylabel('$g(x)$', 'Interpreter', 'latex');
+  legend(['Data', 'Estimate'])
