@@ -8,6 +8,7 @@ function [newChromosome1, newChromosome2] = Cross(chromosome1, chromosome2)
   part21 = chromosome2(1:points2(1));
   part22 = chromosome2(points2(1)+1:points2(2));
   part23 = chromosome2(points2(2)+1:end);
+
   newChromosome1 = [part11; part22; part13];
   newChromosome2 = [part21; part12; part23];
 end

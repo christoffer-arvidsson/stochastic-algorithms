@@ -1,55 +1,72 @@
 
 numberOfGenerations = 50000;
-populationSize = 1000;
-initialChromosomeLength = 256;
-mutationProbability = 0.05;
-tournamentProbability = 0.75;
+populationSize = 100;
+minInitialChromosomeLength = 5;
+maxInitialChromosomeLength = 64;
+initialMutationProbability = 0.04;
+tournamentProbability = 0.99;
 tournamentSize = 5;
-crossoverProbability = 0.8;
-chromosomeLengthBeforePenalty = 4 * 64;
-chromosomeLengthPenaltyFactor = 0.95;
+crossoverProbability = 0.2;
+chromosomeLengthBeforePenalty = 4*64;
+diversityMultiplier = 0;
+mutationProbabilityChange = 1.1;
+numElites = 3;
+sharingMinimumDistance = 0.1;
+sharingStrength = 1;
 
 numVariableRegisters = 4;
 numConstantRegisters = 1;
 numOperations = 4;
-constants = [-0.8];
+constants = [-1, 1, 3];
 operatorSet = cell(numOperations,1);
-operatorSet{1} = @plus;
-operatorSet{2} = @minus;
-operatorSet{3} = @mtimes; 
+operatorSet{1} = @Addition;
+operatorSet{2} = @Subtraction;
+operatorSet{3} = @Multiplication; 
 operatorSet{4} = @ProtectedDivision;
 
-population = InitializePopulation(populationSize,...
-                                  initialChromosomeLength,...
-                                  operatorSet,...
-                                  numVariableRegisters,...
-                                  numConstantRegisters);
+mutationProbability = initialMutationProbability;
 
 functionData = LoadFunctionData;
 xValues = functionData(:,1);
 yTrue = functionData(:,2);
-numSamples = size(functionData, 2);
-constantRegisters = constants;
+%yTrue = 9.*xValues + xValues.^2 - 3.*xValues.^3 + 2.*xValues.^4 + xValues.^6;
+
+population = InitializePopulation(populationSize,...
+                                  operatorSet,...
+                                  numVariableRegisters,...
+                                  numConstantRegisters,...
+                                  minInitialChromosomeLength,...
+                                  maxInitialChromosomeLength);
+
 
 for generation = 1:numberOfGenerations
   % Evaluation
   fitnessList = zeros(populationSize, 1);
+  errorList = zeros(populationSize, 1);
   parfor iChromosome = 1:populationSize
+    constantRegisters = constants;
     variableRegisters = zeros(numVariableRegisters, 1);
-    [fitnessList(iChromosome), ~] = EvaluateChromosome(population(iChromosome).genes, ...
-                                                       variableRegisters, ...
-                                                       constantRegisters, ...
-                                                       operatorSet, ...
-                                                       xValues, yTrue,...
-                                                       chromosomeLengthBeforePenalty, ...
-                                                       chromosomeLengthPenaltyFactor);
+    [errorList(iChromosome), fitnessList(iChromosome), ~] = EvaluateChromosome(population(iChromosome).genes, ...
+                                                                              variableRegisters, ...
+                                                                              constantRegisters, ...
+                                                                              operatorSet, ...
+                                                                              xValues, yTrue,...
+                                                                              chromosomeLengthBeforePenalty);
+
   end
+
+  % Compute the hamming distance between chromosome and rest of
+  % population. Chromosome in dense regions have lower fitness than
+  % equivalent chromosomes in sparse regions, helping keep diversity
+  % in the population.
+  % sharingFactors = CalculateFitnessSharing(population, sharingMinimumDistance, sharingStrength);
+  % fitnessList = fitnessList ./ sharingFactors;
 
   [~, bestIndividualIndex] = max(fitnessList);
 
   % Crossover
-  temporaryPopulation = population;
-  
+  temporaryPopulation = population(:);
+
   for iChromosome = 1:2:populationSize
     i1 = TournamentSelect(fitnessList, tournamentProbability, tournamentSize);
     i2 = TournamentSelect(fitnessList, tournamentProbability, tournamentSize);
@@ -65,7 +82,17 @@ for generation = 1:numberOfGenerations
       temporaryPopulation(iChromosome+1).genes = individual2;     
     end
   end
-  
+
+  % Update mutation probability
+  % if meanDiversity < minimumDiversity
+  %   mutationProbability = min(mutationProbability * mutationProbabilityChange, 1);
+  % else
+  %   mutationProbability = max(mutationProbability / mutationProbabilityChange, 0);
+  % end
+
+  crossoverProbability = errorList(bestIndividualIndex);
+  % mutationProbability = 1 / length(population(bestIndividualIndex).genes);
+
   % Mutate
   for iChromosome = 1:populationSize
     temporaryPopulation(iChromosome).genes = Mutate(temporaryPopulation(iChromosome).genes, ...
@@ -74,22 +101,29 @@ for generation = 1:numberOfGenerations
                                                     numConstantRegisters, ...
                                                     numOperations);
   end
-  
-  temporaryPopulation(1).genes = population(bestIndividualIndex).genes;
+
+  for i = 1:numElites
+    temporaryPopulation(i) = population(bestIndividualIndex);
+  end
+
   population = temporaryPopulation;
 
-  fprintf("Generation %d\tfitness: %.2f\terror %.4f\tlength %d\n", generation, ...
-          max(fitnessList), 1/max(fitnessList), length(population(2).genes))
-
-  mutationProbability = 1/length(population(1).genes);
-
   if mod(generation, 5) == 0
+    fprintf("Generation %d\tfitness: %.2f\terror %.4f\tlength %d\t\tpmut %.4f\n", ...
+            generation, ...
+            fitnessList(bestIndividualIndex), ...
+            errorList(bestIndividualIndex), ...
+            length(population(4).genes) / 4, ...
+            mutationProbability)
+
+    best = population(bestIndividualIndex).genes';
+    matlab.io.saveVariablesToScript('BestChromosome.m','best')
+
     clf
-    PlotFit(population(1).genes);
+    PlotFit(best');
     drawnow
   end
 end
-
 
 
 

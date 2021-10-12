@@ -1,8 +1,15 @@
 function estimate = ExecuteChromosome(chromosome, x, variableRegisters, ...
-                                      constantRegisters, operatorSet)
+                                      constantRegisters, operatorSet, symbolic)
 
   chromosomeLength = size(chromosome, 1);
+  if ~symbolic
+    variableRegisters(:) = 0;
+  else
+    variableRegisters(:) = sym(0);
+  end
+
   variableRegisters(1) = x;
+
   for iInstruction = 1:4:chromosomeLength
     operator = operatorSet{chromosome(iInstruction)};
     destination = chromosome(iInstruction+1);
