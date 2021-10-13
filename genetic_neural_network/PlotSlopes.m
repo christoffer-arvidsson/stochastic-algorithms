@@ -10,7 +10,8 @@ function PlotSlopes(datasetIndex, datasetLength)
     y(2:end) = y(2:end) - cumsum(dy);
 
     nexttile
-    plot(x,y)
+    plot(x,angles)
+    ylim([0,10])
     title(sprintf('Slope %d', iSlope));
   end
 end

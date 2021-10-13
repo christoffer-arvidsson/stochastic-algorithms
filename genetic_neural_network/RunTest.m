@@ -1,27 +1,26 @@
-function RunTest(iDataset, iSlope)
+function RunTest()
+  iDataset = 3;
+  iSlope = 1;
   nInputs = 3;
   nOutputs = 2;
-  nHidden = 8;
-  wMax = 5;
+  nHidden = 12;
+  wMax = 10;
 
   truckParameters = Parameters()
   truckParameters.testRun = true;
-  truckParameters.maxT = 100;
+  truckParameters.maxT = 10000;
 
-  bestChromosome = BestChromosome();
-  bestChromosome = bestChromosome.chromosome;
-  [wIH, wHO] = DecodeChromosome(bestChromosome, nInputs, nHidden,...
+  BestChromosome; % chromosome
+  [wIH, wHO] = DecodeChromosome(chromosome, nInputs, nHidden,...
                                 nOutputs, wMax);
 
-  metrics = RunTruckModel(wIH, wHO, truckParameters, iSlope, iDataset)
+  metrics = RunTruckModel(wIH, wHO, truckParameters, iSlope, iDataset);
   PlotMetrics(metrics, iSlope, iDataset);
 end
 
 function PlotMetrics(metrics, iSlope, iDataset)
   tiledlayout('flow');
-  numberOfDatapoints = metrics.time / metrics.parameters.deltaT;
-  % x = (1:numberOfDatapoints) .* metrics.parameters.deltaT;
-  x = metrics.position(1:numberOfDatapoints);
+  x = metrics.position(1:metrics.datapoints);
 
   nexttile
   
@@ -39,44 +38,49 @@ function PlotMetrics(metrics, iSlope, iDataset)
   xlim([0,metrics.parameters.slopeLength]);
   nexttile
 
-  plot(x, metrics.velocity(1:numberOfDatapoints))
+  plot(x, metrics.velocity(1:metrics.datapoints))
   title('Velocity')
   xlabel('Position')
   ylabel('$m/s$', 'Interpreter', 'latex')
   xlim([0,metrics.parameters.slopeLength]);
+  ylim([0,metrics.parameters.maxVelocity])
   nexttile
 
-  plot(x, metrics.acceleration(1:numberOfDatapoints))
+  plot(x, metrics.acceleration(1:metrics.datapoints))
   title('Acceleration')
   xlabel('Position')
   ylabel('$m/s^2$', 'Interpreter', 'latex')
   xlim([0,metrics.parameters.slopeLength]);
   nexttile
 
-  plot(x, metrics.slopeAngle(1:numberOfDatapoints))
+  plot(x, metrics.slopeAngle(1:metrics.datapoints))
   title('Slope angle')
   xlabel('Position')
   ylabel('degrees')
   xlim([0,metrics.parameters.slopeLength]);
+  ylim([0,metrics.parameters.maxSlopeAngle])
   nexttile
 
-  plot(x, metrics.brakePressure(1:numberOfDatapoints))
+  plot(x, metrics.brakePressure(1:metrics.datapoints))
   title('Pedal brake pressure')
   xlabel('Position')
   ylabel('fraction activated')
   xlim([0,metrics.parameters.slopeLength]);
+  ylim([0,1])
   nexttile
 
-  plot(x, metrics.gearLevel(1:numberOfDatapoints))
+  plot(x, metrics.gearLevel(1:metrics.datapoints))
   title('Gear level')
   xlabel('Position')
   ylabel('level')
   xlim([0,metrics.parameters.slopeLength]);
+  ylim([metrics.parameters.minGearLevel,metrics.parameters.maxGearLevel])
   nexttile
 
-  plot(x, metrics.brakeTemperature(1:numberOfDatapoints))
+  plot(x, metrics.brakeTemperature(1:metrics.datapoints))
   title('Brake temperature')
   xlabel('Position')
   ylabel('K', 'Interpreter', 'latex')
   xlim([0,metrics.parameters.slopeLength]);
+  ylim([0,metrics.parameters.maxTemperature])
 end

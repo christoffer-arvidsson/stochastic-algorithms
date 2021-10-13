@@ -1,3 +1,3 @@
 function SaveChromosome(chromosome)
-  save('BestChromosome.mat', 'chromosome')
+  matlab.io.saveVariablesToScript('BestChromosomeNew.m','chromosome')
 end

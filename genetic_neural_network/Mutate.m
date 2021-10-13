@@ -2,7 +2,7 @@ function mutatedIndividual = Mutate(individual, mutationProbability, creepMutati
   nGenes = size(individual, 2);
   mutationMask = rand(nGenes, 1) < mutationProbability;
 
-  creepMutationMask = mutationMask & (rand(nGenes, 1) < creepMutationRate);
+  creepMutationMask = mutationMask & (rand(nGenes, 1) < creepMutationProbability);
   ordinaryMutationMask = mutationMask & ~creepMutationMask;
 
   mutatedIndividual = individual;

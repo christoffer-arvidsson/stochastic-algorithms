@@ -1,16 +1,21 @@
 function newBrakeTemperature = UpdateBrakeTemperature(currentBrakeTemperature, BrakePressure, ...
-                                                      tau, Ch, ambientTemperature)
-  deltaBrakeTemperature = CalculateDeltaBrakeTemperature(currentBrakeTemperature, BrakePressure, ...
-                                                         tau, Ch);
+                                                      tau, Ch, ...
+                                                      ambientTemperature, ...
+                                                      deltaT)
+  currentDeltaBrakeTemperature = currentBrakeTemperature - ambientTemperature;
+  deltaBrakeTemperatureChange = CalculateDeltaBrakeTemperatureChange(currentDeltaBrakeTemperature, ...
+                                                                     BrakePressure, tau, Ch);
+  
+  deltaBrakeTemperature = currentDeltaBrakeTemperature + deltaBrakeTemperatureChange * deltaT;
   newBrakeTemperature = max(ambientTemperature, ambientTemperature + deltaBrakeTemperature);
 end
 
-function deltaBrakeTemperature = CalculateDeltaBrakeTemperature(currentBrakeTemperature, BrakePressure, ...
-                                                                tau, Ch)
+function deltaBrakeTemperatureChange = CalculateDeltaBrakeTemperatureChange(currentDeltaBrakeTemperature, ...
+                                                                            BrakePressure, tau, Ch)
   if BrakePressure < 0.01
-    deltaBrakeTemperature = -1 * (currentBrakeTemperature / tau);
+    deltaBrakeTemperatureChange = -(currentDeltaBrakeTemperature / tau);
   else
-    deltaBrakeTemperature = Ch * BrakePressure;
+    deltaBrakeTemperatureChange = Ch * BrakePressure;
   end
 end
 

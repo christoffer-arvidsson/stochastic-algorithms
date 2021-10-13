@@ -4,7 +4,7 @@ function parameters = Parameters()
   parameters.maxVelocity = 25;
   parameters.minVelocity = 1;
   parameters.maxSlopeAngle = 10;
-  parameters.maxTemperature = 700;
+  parameters.maxTemperature = 750;
 
   parameters.startAcceleration = 0;
   parameters.startVelocity = 20;
@@ -13,9 +13,9 @@ function parameters = Parameters()
   parameters.startBrakeTemperature = 500;
 
   parameters.slopeLength = 1000;
-  parameters.deltaT = 0.25;
+  parameters.deltaT = 0.1;
   parameters.maxT = 100; % Only for the test program later
-  parameters.tau = 1;
+  parameters.tau = 30;
   parameters.Ch = 40;
   parameters.gearConstant = 3000;
   parameters.mass = 20000;

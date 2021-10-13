@@ -1,4 +1,6 @@
-function acceleration = CalculateAcceleration(brakePressure, gearLevel, gearConstant, mass, alpha, gravityConstant, brakeTemperature, maxTemperature)
+function acceleration = CalculateAcceleration(brakePressure, gearLevel, gearConstant, mass, alpha, ...
+                                              gravityConstant, brakeTemperature, maxTemperature)
+
   gravityForce = CalculateGravityForce(mass, gravityConstant, alpha);
   foundationBrakeForce = CalculateFoundationBrakeForce(mass, gravityConstant, brakeTemperature, ...
                                                        maxTemperature, brakePressure);
@@ -16,7 +18,7 @@ function foundationBrakeForce = CalculateFoundationBrakeForce(mass, gravityConst
                                                               maxTemperature,  brakePressure)
   foundationBrakeForce = ((mass * gravityConstant)/20) * brakePressure;
   if brakeTemperature >= maxTemperature - 100
-    exponent = -1 * (brakeTemperature - (maxTemperature - 100)) / 100;
+    exponent = -(brakeTemperature - (maxTemperature - 100)) / 100;
     foundationBrakeForce = foundationBrakeForce * exp(exponent);
   end
 end

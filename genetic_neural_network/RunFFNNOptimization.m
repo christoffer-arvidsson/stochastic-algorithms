@@ -4,24 +4,31 @@ clear all;
 % Parameters %
 %%%%%%%%%%%%%%
 
+% Truck parameters
 parameters = Parameters()
 parameters.testRun = false;
 
-% Genetic algorithm parameters
-numGenerations = 1000;
-mutationProbability = 0.1;
-creepMutationProbability = 0.2;
-creepMutationRate = 0.1;
-populationSize = 100;
-tournamentProbability = 0.75;
-tournamentSize = 20;
-crossoverProbability = 0.8;
+% Network
 nInputs = 3;
 nOutputs = 2;
-nHidden = 8;
-wMax = 5;
+nHidden = 12;
+wMax = 10;
+nGenes = (nHidden*(nInputs+1)+nOutputs*(nHidden+1));
+
+% Genetic algorithm parameters
+numGenerations = 1000;
+populationSize = 100;
+tournamentProbability = 0.75;
+tournamentSize = 5;
+crossoverProbability = 0.2;
+mutationProbability = 1 / nGenes;
+creepMutationProbability = 0.6;
+creepMutationRate = 0.2;
+numElites = 1;
+
+% Training
 saveBest = true;
-patience = 50;
+patience = 40;
 
 % Datasets
 trainingSetSize = 10;
@@ -29,23 +36,22 @@ trainingSetIndex = 1;
 validationSetSize = 5;
 validationSetIndex = 2;
 testSetSize = 5;
-testSetIndex = 3;
+testSetIndex = 3
 
 population = InitializePopulation(populationSize, nInputs, nHidden, nOutputs, wMax);
 
-maximumTrainFitness  = 0;
-trainFitnessValues = zeros(numGenerations, 1);
+maximumTrainFitness = 0;
+trainFitnessValues = zeros(1,numGenerations);
 maximumValidationFitness  = 0;
-validationFitnessValues = zeros(numGenerations, 1);
+validationFitnessValues = zeros(1,numGenerations);
 generationsWithoutImprovement = 0;
 
-iBestIndividual = 1;
 for generation = 1:numGenerations
   trainFitnessList = zeros(1, populationSize);
   validationFitnessList = zeros(1, populationSize);
 
   % Evaluate population, run truck model
-  parfor iIndividual = 1:populationSize
+  for iIndividual = 1:populationSize
     % Read individual
     chromosome = population(iIndividual, :);
     [wIH, wHO] = DecodeChromosome(chromosome, nInputs, nHidden, nOutputs, wMax);
@@ -58,7 +64,6 @@ for generation = 1:numGenerations
   trainFitnessValues(generation) = bestTrainFitness;
   if bestTrainFitness > maximumTrainFitness
     maximumTrainFitness = bestTrainFitness;
-    iBestIndividual = bestTrainIndex;
   end
 
   [bestValidationFitness, bestValidationIndex] = max(validationFitnessList, [], 'all', 'linear');
@@ -67,7 +72,7 @@ for generation = 1:numGenerations
     maximumValidationFitness = bestValidationFitness;
     generationsWithoutImprovement = 0;
     if saveBest
-      SaveChromosome(population(bestValidationIndex, :));
+     SaveChromosome(population(bestValidationIndex, :));
     end
   else
     generationsWithoutImprovement = generationsWithoutImprovement + 1;
@@ -79,15 +84,18 @@ for generation = 1:numGenerations
                                     tournamentSize, crossoverProbability);
   
   % Mutation
-  mutatedPopulation = MutatePopulation(crossPopulation, population(iBestIndividual,:), ...
+  mutatedPopulation = MutatePopulation(crossPopulation, ...
                                        mutationProbability, ...
                                        creepMutationProbability, creepMutationRate, wMax);
   
-  % Replacement
+  % Insert elites
+  for i = 1:numElites
+    mutatedPopulation(i,:) = population(bestTrainIndex,:);
+  end
   population = mutatedPopulation;
 
   fprintf('Gen: %d\tF_train: %.4f\tF_val: %.4f\tPatience: (%d/%d)\n', ...
-          generation, maximumTrainFitness, maximumValidationFitness, ...
+          generation, bestTrainFitness, bestValidationFitness, ...
           generationsWithoutImprovement, patience);
 
   if generationsWithoutImprovement >= patience & patience ~= 0
@@ -96,6 +104,7 @@ for generation = 1:numGenerations
   end
 end
 
+figure(1)
 PlotFitness(trainFitnessValues(1:generation), validationFitnessValues(1:generation));
 
 
