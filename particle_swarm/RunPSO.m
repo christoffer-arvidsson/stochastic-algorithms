@@ -9,7 +9,7 @@ clc;
 % Parameters %
 %%%%%%%%%%%%%%
 
-numIterations = 100;
+numIterations = 1000;
 numVariables = 2;
 numParticles = 50;
 xMin = -5;
@@ -66,5 +66,4 @@ for iteration = 1:numIterations
     clf
     PlotPSO(xMin, xMax, positions, bestSwarmPosition)
     drawnow
-    pause(0.01)
 end
