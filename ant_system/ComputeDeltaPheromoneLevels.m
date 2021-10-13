@@ -1,10 +1,23 @@
 function  deltaPheromoneLevel = ComputeDeltaPheromoneLevels(pathCollection,pathLengthCollection)
-  numberOfNodes = length(pathCollection);
-  numberOfAnts = length(pathCollection);
+  numberOfNodes = size(pathCollection,2);
+  numberOfAnts = size(pathCollection,1);
+
   deltaPheromoneLevel = zeros(numberOfNodes);
+
   for iAnt = 1:numberOfAnts
+    pathLength = pathLengthCollection(iAnt);
+    path = pathCollection(iAnt, :);
+    startNode = path(1);
+    endNode = path(end);
+
     for iNode = 1:numberOfNodes-1
-      deltaPheromoneLevel(iNode+1,iNode) = deltaPheromoneLevel(iNode+1,iNode) + pathLengthCollection(iAnt);
+      destination = path(iNode+1);
+      source = path(iNode);
+      deltaPheromoneLevel(destination,source) = deltaPheromoneLevel(destination, source) + 1/pathLength;
     end
+
+    % Return home
+    deltaPheromoneLevel(startNode,endNode) = deltaPheromoneLevel(startNode, endNode) + 1/pathLength;
   end
 end
+

@@ -1,7 +1,7 @@
 function path = GeneratePath(pheromoneLevel, visibility, alpha, beta)
   numberOfNodes = length(visibility);
   path = zeros(numberOfNodes, 1);
-  visitedMask = zeros(numberOfNodes, 1) == 1;
+  visitedMask = zeros(numberOfNodes, 1);
 
   startNode = randi(numberOfNodes);
   path(1) = startNode;
@@ -12,6 +12,7 @@ function path = GeneratePath(pheromoneLevel, visibility, alpha, beta)
     selectedNode = getNextNode(currentNode, pheromoneLevel, visibility, visitedMask, alpha, beta);
     visitedMask(selectedNode) = true;
     path(i) = selectedNode;
+    currentNode = selectedNode;
   end
 
   path = transpose(path);
@@ -22,10 +23,10 @@ function selectedNode = getNextNode(currentNode, pheremoneLevel, visibility, vis
   visibilityUnvisited = visibility(currentNode, ~visitedMask).^beta;
   normalizingFactor = sum(pheremoneUnvisited .* visibilityUnvisited);
 
-  selectionProbabilities = pheremoneUnvisited.^alpha .* visibility(currentNode, ~visitedMask).^beta;
+  selectionProbabilities = pheremoneUnvisited.^alpha .* visibilityUnvisited.^beta;
   selectionProbabilities = selectionProbabilities ./ normalizingFactor;
 
-  indices = 1:length(visibility);
+  indices = 1:length(visitedMask);
   unvisitedIndices = indices(~visitedMask);
   if length(unvisitedIndices) == 1
     selectedNode = unvisitedIndices(1);

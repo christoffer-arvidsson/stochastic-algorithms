@@ -6,6 +6,7 @@
 
 clear all;
 clc;
+clf;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Data
@@ -18,17 +19,17 @@ numberOfCities = length(cityLocation);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 numberOfAnts = 50;  %% Changes allowed
 alpha = 1.0;        %% Changes allowed
-beta = 3.0;         %% Changes allowed
-rho = 0.3;          %% Changes allowed
+beta = 3.5;         %% Changes allowed
+rho = 0.5;          %% Changes allowed
 tau0 = 0.1;         %% Changes allowed
 
-targetPathLength = 103;
+targetPathLength = 98;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Initialization
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-                                % To do: Add plot initialization
+% To do: Add plot initialization
 range = [0 20 0 20];
 tspFigure = InitializeTspPlot(cityLocation, range);
 connection = InitializeConnections(cityLocation);
@@ -39,6 +40,7 @@ visibility = GetVisibility(cityLocation);                         % To do: write
 % Main loop
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 minimumPathLength = inf;
+bestPath = zeros(numberOfCities, 1);
 
 iIteration = 0;
 pathCollection = zeros(numberOfAnts, numberOfCities);
@@ -51,17 +53,19 @@ while (minimumPathLength > targetPathLength)
 % Generate paths:
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  for k = 1:numberOfAnts
-    path = GeneratePath(pheromoneLevel, visibility, alpha, beta);   % To do: Write the GeneratePath function
-    pathLength = GetPathLength(path, cityLocation);                 % To do: Write the GetPathLength function
-    if (pathLength < minimumPathLength)
-      minimumPathLength = pathLength;
-      fprintf('Iteration %d, ant %d: path length = %.5f\n',iIteration,k,minimumPathLength);
-      PlotPath(connection,cityLocation,path);
-    end
-    pathCollection(k,:) = path;
-    pathLengthCollection(k) = pathLength;
+for k = 1:numberOfAnts
+  path = GeneratePath(pheromoneLevel, visibility, alpha, beta);   % To do: Write the GeneratePath function
+  pathLength = GetPathLength(path, cityLocation);                 % To do: Write the GetPathLength function
+  if (pathLength < minimumPathLength)
+    minimumPathLength = pathLength;
+    bestPath = path;
+    PlotPath(connection,cityLocation,path);
+    matlab.io.saveVariablesToScript('BestResultFoundNew.m','bestPath');
+    fprintf('Iteration %d, ant %d: path length = %.5f\n',iIteration,k,minimumPathLength);
   end
+  pathCollection(k,:) = path;
+  pathLengthCollection(k) = pathLength;
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 % Update pheromone levels
@@ -71,11 +75,6 @@ while (minimumPathLength > targetPathLength)
   pheromoneLevel = UpdatePheromoneLevels(pheromoneLevel,deltaPheromoneLevel,rho);          % To do: write the UpdatePheromoneLevels function
 
 end
-
-
-
-
-
 
 
 
