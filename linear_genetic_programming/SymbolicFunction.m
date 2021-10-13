@@ -13,11 +13,10 @@ function [f, simpleF] = SymbolicFunction(chromosome)
 
   constantRegisters = constants;
   for i = 1:numVariableRegisters
-    variableRegisters(i) = sym(0)
+    variableRegisters(i) = sym(0);
   end
 
-  f = ExecuteChromosome(chromosome, x, variableRegisters, ...
-                        constantRegisters, operatorSet, true);
+  f = ExecuteChromosome(chromosome, x, variableRegisters, constantRegisters, operatorSet, true);
   simpleF = simplify(f);
 
 end

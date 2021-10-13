@@ -1,13 +1,13 @@
 function yEstimate = PerformFit(xValues, yTrue, chromosome)
   numVariableRegisters = 4;
-  numConstantRegisters = 3;
-  numOperators = 4;
+  numConstantRegisters = 1;
+  numOperators = 1;
   operatorSet = cell(numOperators,1);
   operatorSet{1} = @Addition;
   operatorSet{2} = @Subtraction;
   operatorSet{3} = @Multiplication; 
   operatorSet{4} = @ProtectedDivision;
-  constants = [-1, 1, 3];
+  constants = [-1];
   chromosomeLengthBeforePenalty = 4*64;
 
   constantRegisters = constants;
